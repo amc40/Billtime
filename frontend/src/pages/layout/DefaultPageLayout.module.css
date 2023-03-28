@@ -1,0 +1,17 @@
+#page-container {
+  display: flex;
+}
+
+#main-navbar-menu {
+  display: flex;
+  border-radius: 0;
+  height: 100vh;
+}
+
+.main-navbar-menu-item {
+  border-radius: 0;
+}
+
+#page-area {
+  flex-grow: 1;
+}
