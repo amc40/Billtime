@@ -18,7 +18,8 @@
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "postgresql-client"
     },
-    "ghcr.io/devcontainers/features/terraform:1": {}
+    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
   },
   "customizations": {
     "vscode": {
