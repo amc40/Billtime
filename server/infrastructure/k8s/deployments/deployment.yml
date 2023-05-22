@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billtime
+spec:
+  selector:
+    matchLabels:
+      app: billtime
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  billtime
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-admin
+                  key: db-admin-password
+        - name: billtime-server
+          image: registry.digitalocean.com/my-registry/my-image:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: DATABASE_HOST
+              value: mysql

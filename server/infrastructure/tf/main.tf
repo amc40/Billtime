@@ -41,58 +41,19 @@ resource "digitalocean_project" "billtime_project" {
   ]
 }
 
-resource "digitalocean_vpc" "billtime_vpc" {
-  name      = "billtime-vpc"
+resource "digitalocean_container_registry" "webb_and_wallace_container_registry" {
+  name                   = "webb-and-wallace-container-registry"
+  subscription_tier_slug = "starter"
   region    = local.location
 }
 
-resource "digitalocean_database_db" "billtime_db" {
-  cluster_id = digitalocean_database_cluster.web_and_wallace_db_cluster.id
-  name       = "billtime"
-}
+resource "digitalocean_kubernetes_cluster" "billtime_k8s_cluster" {
+  name   = "billtime-k8s-cluster"
+  region = local.location
 
-resource "digitalocean_database_cluster" "web_and_wallace_db_cluster" {
-  name       = "web-and-wallace-postgres-cluster"
-  engine     = "mysql"
-  version    = "8"
-  size       = "db-s-1vcpu-1gb"
-  region     = local.location
-  node_count = 1
-  tags = local.common_tags
-  private_network_uuid = digitalocean_vpc.billtime_vpc.id
-}
-
-resource "digitalocean_droplet" "billtime_droplet" {
-  name      = "billtime-droplet"
-  image     = "ubuntu-20-04-x64"
-  region    = local.location
-  size      = "s-1vcpu-1gb"
-  tags = local.common_tags
-  vpc_uuid  = digitalocean_vpc.billtime_vpc.id
-}
-
-resource "digitalocean_database_firewall" "web_and_wallace_db_cluster_firewall" {
-  cluster_id = digitalocean_database_cluster.web_and_wallace_db_cluster.id
-
-  rule {
-    type  = "droplet"
-    value = digitalocean_droplet.billtime_droplet.id
-  }
-}
-
-resource "digitalocean_firewall" "billtime_droplet_firewall" {
-  name = "billtime-droplet-firewall"
-  droplet_ids = [ digitalocean_droplet.billtime_droplet.id ]
-
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "80"
-    source_addresses = ["0.0.0.0/0", "::/0"]
-  }
-
-  outbound_rule {
-    protocol              = "tcp"
-    port_range            = "3306"
-    destination_addresses = [digitalocean_vpc.billtime_vpc.ip_range, "::/0"]
+  node_pool {
+    name       = "worker-pool"
+    size       = "s-1vcpu-1gb"
+    node_count = 2
   }
 }
