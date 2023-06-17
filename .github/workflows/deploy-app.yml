@@ -50,7 +50,7 @@ jobs:
           retention-days: 30     
 
       - name: Apply Terraform plan
-        run: terraform apply tfplan -var="do_token=${{secrets.DO_TOKEN}}" -auto-approve
+        run: terraform apply tfplan -var="do_token=${{secrets.DO_TOKEN}}"
   tag-commit:
     runs-on: ubuntu-latest
     steps:
