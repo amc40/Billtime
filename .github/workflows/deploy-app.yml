@@ -63,9 +63,6 @@ jobs:
         with:
           token: ${{ secrets.DO_TOKEN }}
       
-      - name: Set up Docker
-        uses: docker/setup-docker@v1
-
       - name: Build and tag Docker image
         run: docker build -t registry.digitalocean.com/webb-and-wallace-container-registry/billtime-server:$(echo $GITHUB_SHA | head -c7) server/
 
