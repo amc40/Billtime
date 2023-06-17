@@ -37,23 +37,26 @@ resource "digitalocean_project" "billtime_project" {
   purpose     = "Web Application"
   environment = title(local.environment)
   resources = [
-    digitalocean_database_cluster.web_and_wallace_db_cluster.urn,
+    digitalocean_kubernetes_cluster.billtime_k8s_cluster.urn,
   ]
 }
 
 resource "digitalocean_container_registry" "webb_and_wallace_container_registry" {
   name                   = "webb-and-wallace-container-registry"
   subscription_tier_slug = "starter"
-  region    = local.location
+  # No option to deploy in lon1 region
+  region    = "ams3"
 }
 
 resource "digitalocean_kubernetes_cluster" "billtime_k8s_cluster" {
   name   = "billtime-k8s-cluster"
   region = local.location
-
+  version = "1.27.2-do.0"
   node_pool {
     name       = "worker-pool"
-    size       = "s-1vcpu-1gb"
+    size       = "s-1vcpu-2gb"
     node_count = 2
+    tags = local.common_tags
   }
+  tags = local.common_tags
 }
