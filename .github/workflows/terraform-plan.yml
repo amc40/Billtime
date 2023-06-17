@@ -38,7 +38,7 @@ jobs:
 
       - name: Terraform plan
         id: plan
-        run: terraform plan -out=tfplan -var="do_token=${DO_TOKEN}" -no-color
+        run: terraform plan -out=tfplan -var="do_token=${secrets.DO_TOKEN}" -no-color
       
       - name: Upload Terraform plan artifact
         uses: actions/upload-artifact@v2
