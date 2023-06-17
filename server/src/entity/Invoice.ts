@@ -7,13 +7,13 @@ export class Invoice {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'date' })
   allocationDate: Date;
 
   @ManyToOne(() => Client)
   client: Client;
 
-  @Column({ type: 'timestamptz', nullable: true })
+  @Column({ type: 'date', nullable: true })
   completedDate: Date | null;
 
   @OneToMany(() => WorkGroup, (workGroup) => workGroup.invoice)

@@ -12,9 +12,9 @@ import { WorkType } from "./entity/WorkType"
 import { getRequiredEnv } from "./env"
 
 export const AppDataSource = new DataSource({
-    type: "postgres",
+    type: "mysql",
     host: getRequiredEnv("DB_HOST"),
-    port: 5432,
+    port: 3306,
     username: getRequiredEnv("DB_USERNAME"),
     password: getRequiredEnv("DB_PASSWORD"),
     database: getRequiredEnv("DB_NAME"),

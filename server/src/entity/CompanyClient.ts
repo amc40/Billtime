@@ -46,10 +46,10 @@ export class CompanyClient {
     @ManyToOne(type => ContactInformation) @JoinColumn() 
     contactInformation: ContactInformation;
 
-    @Column({ type: 'timestamptz' })
+    @Column({ type: 'date' })
     incorporationDate: Date
 
-    @Column({ type: 'timestamptz' })
+    @Column({ type: 'date' })
     annualReturnDate: Date
 
     @Column()

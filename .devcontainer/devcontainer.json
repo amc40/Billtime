@@ -16,7 +16,7 @@
       "version": "18.13.0"
     },
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
-      "packages": "postgresql-client"
+      "packages": "mysql-client"
     },
     "ghcr.io/devcontainers/features/terraform:1": {},
     "ghcr.io/devcontainers/features/aws-cli:1": {},
@@ -27,7 +27,11 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["ckolkman.vscode-postgres", "hashicorp.terraform"]
+      "extensions": [
+		"hashicorp.terraform",
+		"cweijan.vscode-mysql-client2",
+		"rangav.vscode-thunder-client"
+	]
     }
   },
   "postStartCommand": "docker-compose -f server/docker-compose.yml up -d"
