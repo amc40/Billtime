@@ -2,7 +2,11 @@ name: Terraform Plan
 
 on:
   pull_request:
-
+env:
+  AWS_REGION : "eu-west-2"
+permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
 jobs:
   deploy-infrastructure:
     runs-on: ubuntu-latest
@@ -16,7 +20,7 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
       
-      - name: Configure AWS credentials from Test account
+      - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::436795273900:role/github-actions-billtime-terraform-backend
