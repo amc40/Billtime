@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: billtime-server
-          image: registry.digitalocean.com/my-registry/my-image:latest
+          image: registry.digitalocean.com/webb-and-wallace-container-registry/billtime-server:latest
           ports:
             - containerPort: 80
           env:
