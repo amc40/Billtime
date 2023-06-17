@@ -21,3 +21,5 @@ spec:
           # TODO: get connection string
             - name: DATABASE_HOST
               value: mysql
+      imagePullSecrets:
+        - name: docker-cfg
