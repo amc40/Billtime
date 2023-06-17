@@ -37,8 +37,6 @@ jobs:
       
       - name: Upload Terraform plan artifact
         uses: actions/upload-artifact@v2
-        run:
-          working-directory: .
         with:
           name: terraform-plan
-          path: tfplan
+          path: infrastructure/tf/tfplan
