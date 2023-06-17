@@ -1,0 +1,27 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+
+jobs:
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Terraform plan
+        run: terraform plan -out=tfplan -var="do_token=${DO_TOKEN}"
+      
+      - name: Upload Terraform plan artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: terraform-plan
+          path: tfplan
