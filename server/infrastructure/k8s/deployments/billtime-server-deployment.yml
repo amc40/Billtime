@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billtime-server-deployment
+spec:
+  selector:
+    matchLabels:
+      app: billtime-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  billtime-server
+    spec:
+      containers:
+        - name: billtime-server
+          image: registry.digitalocean.com/my-registry/my-image:latest
+          ports:
+            - containerPort: 80
+          env:
+          # TODO: get connection string
+            - name: DATABASE_HOST
+              value: mysql
