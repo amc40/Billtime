@@ -77,7 +77,7 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 billtime-k8s-cluster
 
       - name: Configure K8s secrets
-        run: kubectl create secret generic db-admin --from-literal=db-admin-password='${{secrets.DB_ADMIN_PASSWORD}}'
+        run: kubectl create secret generic db-admin --save-config --dry-run=client --from-literal=db-admin-password='${{secrets.DB_ADMIN_PASSWORD}}'
 
       - name: Deploy to DigitalOcean Kubernetes
         run: kubectl apply -R -f ./infrastructure/k8s
