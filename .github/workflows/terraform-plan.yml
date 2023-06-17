@@ -2,15 +2,18 @@ name: Terraform Plan
 
 on:
   pull_request:
-env:
-  AWS_REGION : "eu-west-2"
+
 jobs:
   terraform-plan:
     runs-on: ubuntu-latest
+
     permissions:
+      # required by Post Plan to GitHub PR
       pull-requests: write
-      id-token: write   # This is required for requesting the JWT
-      contents: read    # This is required for actions/checkout
+      # Required by AWS login
+      id-token: write 
+      contents: read 
+    
     defaults:
       run:
         working-directory: ./infrastructure/tf
@@ -40,7 +43,7 @@ jobs:
       - name: Upload Terraform plan artifact
         uses: actions/upload-artifact@v2
         with:
-          name: terraform-plan
+          name: terraform-plan-${{ github.sha }}
           path: infrastructure/tf/tfplan
           retention-days: 1     
 
