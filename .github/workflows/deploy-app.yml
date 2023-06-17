@@ -1,0 +1,65 @@
+name: Deploy App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-terraform:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # required by Post Plan to GitHub PR
+      pull-requests: write
+      # Required by AWS login
+      id-token: write 
+      contents: read 
+    
+    defaults:
+      run:
+        working-directory: ./infrastructure/tf
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Login to AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::436795273900:role/github-actions-billtime-terraform-backend
+          aws-region: eu-west-2
+
+      - name: Initialize Terraform
+        run: terraform init
+      
+      - name: Select Terraform Workspace
+        run: terraform workspace select staging
+
+      - name: Terraform plan
+        run: terraform plan -out=tfplan -var="do_token=${DO_TOKEN}"
+      
+      - name: Upload Terraform plan artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: terraform-plan-${{ github.sha }
+          path: infrastructure/tf/tfplan
+          retention-days: 30     
+
+      - name: Apply Terraform plan
+        run: terraform apply tfplan -var="do_token=${DO_TOKEN}" -auto-approve
+  tag-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Tag commit
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git tag Staging
+          git push origin --tags
