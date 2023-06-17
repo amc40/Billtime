@@ -1,16 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: mysql-access
+  name: default-deny-ingress
 spec:
-  podSelector:
-    matchLabels:
-      app: mysql
-  ingress:
-    - ports:
-        - protocol: TCP
-          port: 80
-      from:
-        - podSelector:
-            matchLabels:
-              app: billtime-server
+  podSelector: {}
+  policyTypes:
+  - Ingress

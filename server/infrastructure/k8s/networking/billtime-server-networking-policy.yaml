@@ -1,21 +1,25 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: mysql-access-policy
+  name: billtime-server-network-policy
 spec:
   podSelector:
     matchLabels:
-      app: mysql
+      app: billtime-server
   policyTypes:
   - Ingress
   - Egress
   ingress:
-  - ports:
+  - from:
+    - podSelector: {}
+    ports:
     - protocol: TCP
       port: 80
-    from:
-    - podSelector: {}
   egress:
-  - ports:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mysql
+    ports:
     - protocol: TCP
       port: 3306
