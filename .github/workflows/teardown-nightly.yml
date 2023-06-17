@@ -1,12 +1,11 @@
-name: Deploy App
+name: Nightly Teardown
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
-  deploy-terraform:
+  teardown-with-terraform:
     runs-on: ubuntu-latest
 
     permissions:
@@ -37,15 +36,5 @@ jobs:
       - name: Select Terraform Workspace
         run: terraform workspace select staging
 
-      - name: Terraform plan
-        run: terraform plan -out=tfplan -var="do_token=${{secrets.DO_TOKEN}}"
-      
-      - name: Upload Terraform plan artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: terraform-plan-${{ github.sha }}
-          path: infrastructure/tf/tfplan
-          retention-days: 30     
-
       - name: Apply Terraform plan
-        run: terraform apply tfplan
+        run: terraform apply -destroy -auto-approve
