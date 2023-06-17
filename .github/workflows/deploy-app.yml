@@ -40,7 +40,7 @@ jobs:
         run: terraform workspace select staging
 
       - name: Terraform plan
-        run: terraform plan -out=tfplan -var="do_token=${secrets.DO_TOKEN}"
+        run: terraform plan -out=tfplan -var="do_token=${{secrets.DO_TOKEN}}"
       
       - name: Upload Terraform plan artifact
         uses: actions/upload-artifact@v2
@@ -50,7 +50,7 @@ jobs:
           retention-days: 30     
 
       - name: Apply Terraform plan
-        run: terraform apply tfplan -var="do_token=${secrets.DO_TOKEN}" -auto-approve
+        run: terraform apply tfplan -var="do_token=${{secrets.DO_TOKEN}}" -auto-approve
   tag-commit:
     runs-on: ubuntu-latest
     steps:
