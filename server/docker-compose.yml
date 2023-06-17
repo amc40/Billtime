@@ -1,11 +1,18 @@
-version: "2"
+version: "3.8"
 services:
   db:
-    image: postgres
+    image: mysql:8.0.33
+    restart: always
     volumes:
       - /data/db:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "password"
+      MYSQL_DATABASE: "billtime"
+      MYSQL_ROOT_PASSWORD: "password"
+volumes:
+  db:
+    driver: local
