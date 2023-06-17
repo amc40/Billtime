@@ -51,38 +51,12 @@ jobs:
 
       - name: Apply Terraform plan
         run: terraform apply tfplan -var="do_token=${DO_TOKEN}" -auto-approve
-    # deploy-server:
-    #   - name: Checkout repository
-    #     uses: actions/checkout@v2
-    #   - name: Set up Docker
-    #     uses: docker/setup-docker@v1
-
-    #   - name: Build and tag Docker image
-    #     run: |
-    #       docker build -t billtime-server server/
-    #       docker tag billtime-server your-digitalocean-container-registry/billtime:${{ github.sha }}
-
-    #   - name: Login to DigitalOcean Container Registry
-    #     run: |
-    #       echo ${{ secrets.DOCR_TOKEN }} | docker login --username _json_key --password-stdin registry.digitalocean.com
-
-    #   - name: Push Docker image to DigitalOcean Container Registry
-    #     run: |
-    #       docker push your-digitalocean-container-registry/billtime-server:${{ github.sha }}
-
-    #   - name: Set up kubectl
-    #     uses: azure/k8s-set-context@v1
-    #     with:
-    #       kubeconfig: ${{ secrets.KUBECONFIG }}
-
-    #   - name: Apply Kubernetes configuration
-    #     run: kubectl apply -R -f infrastructure/k8s
   tag-commit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
+
       - name: Tag commit
         run: |
           git config --local user.email "actions@github.com"
