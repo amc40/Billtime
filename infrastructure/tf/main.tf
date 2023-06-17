@@ -60,3 +60,27 @@ resource "digitalocean_kubernetes_cluster" "billtime_k8s_cluster" {
   }
   tags = local.common_tags
 }
+
+resource "digitalocean_container_registry_docker_credentials" "webb_and_wallace_container_registry_docker_credentials" {
+  registry_name = digitalocean_container_registry.webb_and_wallace_container_registry.name
+}
+
+provider "kubernetes" {
+  host             = digitalocean_kubernetes_cluster.billtime_k8s_cluster.endpoint
+  token            = digitalocean_kubernetes_cluster.billtime_k8s_cluster.kube_config[0].token
+  cluster_ca_certificate = base64decode(
+    digitalocean_kubernetes_cluster.billtime_k8s_cluster.kube_config[0].cluster_ca_certificate
+  )
+}
+
+resource "kubernetes_secret" "k8s_container_registry_config" {
+  metadata {
+    name = "docker-cfg"
+  }
+
+  data = {
+    ".dockerconfigjson" = digitalocean_container_registry_docker_credentials.webb_and_wallace_container_registry_docker_credentials.docker_credentials
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+}
