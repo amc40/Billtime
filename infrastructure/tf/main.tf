@@ -43,7 +43,7 @@ resource "digitalocean_project" "billtime_project" {
 
 resource "digitalocean_container_registry" "webb_and_wallace_container_registry" {
   name                   = "webb-and-wallace-container-registry"
-  subscription_tier_slug = "starter"
+  subscription_tier_slug = "basic"
   # No option to deploy in lon1 region
   region    = "ams3"
 }
